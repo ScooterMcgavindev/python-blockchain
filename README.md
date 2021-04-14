@@ -17,16 +17,11 @@ python3 -m pytest backend/tests
 ```
 
 **Run the application and API**
-
-Make sure to activate the venv
-
 ```
 python3 -m backend.app
 ```
 
 **Run a peer instance**
-Make sure to activate the venv
-
 ```
 export PEER=True && python3 -m backend.app
 ```
