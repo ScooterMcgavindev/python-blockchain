@@ -18,15 +18,19 @@ class Wallet:
     Keeps track of the miner's balance.
     Allows a miner to authorize transactions. 
     """
-    def __init__(self):
+    def __init__(self, blockchain=None):
+        self.blockchain = blockchain
         self.address = str(uuid.uuid4())[0:8]  # generates first 8 uniquie characters in a string-format
-        self.balance = STARTING_BALANCE
         self.private_key = ec.generate_private_key(
             ec.SECP256K1(),                    # Standards of efficient cryptography Prime 256-bits Koblics 1st implementation of the algo
             default_backend()
         )
         self.public_key = self.private_key.public_key()
         self.serialize_public_key()
+
+    @property
+    def balance(self):
+        return Wallet.calculate_balance(self.blockchain, self.address)
 
     def sign(self, data):
         """
@@ -81,6 +85,9 @@ class Wallet:
         address since the most recent transaction by that address.
         """
         balance = STARTING_BALANCE
+
+        if not blockchain:
+            return balance
 
         for block in blockchain.chain:
             for transaction in block.data:
